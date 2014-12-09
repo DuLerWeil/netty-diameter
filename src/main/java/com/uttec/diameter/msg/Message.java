@@ -27,4 +27,10 @@ public class Message {
     public void setAvpSet(AvpSet avpSet) {
         this.avpSet = avpSet;
     }
+
+    public byte[] getBytes() {
+        byte[] msg = new byte[header.getLength()];
+        //TODO byte[] to Message by DiameterHelper
+        return msg;
+    }
 }

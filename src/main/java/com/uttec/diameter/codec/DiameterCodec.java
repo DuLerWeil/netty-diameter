@@ -13,21 +13,21 @@ import java.util.List;
  * Created by DuLerWeil on 2014/12/8.
  */
 public class DiameterCodec extends ByteToMessageCodec<Message> {
-    private boolean toHeader = true;
+    private boolean headerNext = true;
     private Header header;
     @Override
     protected void encode(ChannelHandlerContext ctx, Message msg, ByteBuf out) throws Exception {
-
+        out.writeBytes(msg.getBytes());
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (toHeader) {
+        if (headerNext) {
             if (in.readableBytes() < 20) {
                 return;
             }
             header = DiameterHelper.parseHeader(in);
-            toHeader = false;
+            headerNext = false;
         } else {
             if (in.readableBytes() < header.getLength() - 20) {
                 return;
@@ -35,7 +35,7 @@ public class DiameterCodec extends ByteToMessageCodec<Message> {
             AvpSet avpSet = DiameterHelper.parseAvpSet(in, header.getLength() - 20);
             Message msg = new Message(header, avpSet);
             out.add(msg);
-            toHeader = true;
+            headerNext = true;
         }
     }
 }
