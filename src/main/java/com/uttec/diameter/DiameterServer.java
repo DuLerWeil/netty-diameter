@@ -1,7 +1,6 @@
-package com.uttec.diameter.impl;
+package com.uttec.diameter;
 
-import com.uttec.diameter.api.DiameterServer;
-import com.uttec.diameter.impl.handler.DiameterServerInitializerImpl;
+import com.uttec.diameter.handler.DiameterServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -14,13 +13,13 @@ import io.netty.handler.ssl.SslContext;
 /**
  * Created by DuLerWeil on 2014/12/8.
  */
-public class DiameterServerImpl implements DiameterServer, Runnable {
+public class DiameterServer implements Runnable {
     private boolean sctp;
     private int port;
     private SslContext sslCtx;
     private String handlerClass;
 
-    public DiameterServerImpl(boolean sctp, int port, SslContext sslCtx, String handlerClass) {
+    public DiameterServer(boolean sctp, int port, SslContext sslCtx, String handlerClass) {
         this.sctp = sctp;
         this.port = port;
         this.sslCtx = sslCtx;
@@ -37,7 +36,7 @@ public class DiameterServerImpl implements DiameterServer, Runnable {
                     .option(ChannelOption.SO_REUSEADDR, true)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new DiameterServerInitializerImpl(sslCtx, handlerClass))
+                    .childHandler(new DiameterServerInitializer(sslCtx, handlerClass))
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childOption(ChannelOption.CONNECT_TIMEOUT_MILLIS, 60000);
 

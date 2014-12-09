@@ -1,7 +1,6 @@
-package com.uttec.diameter.impl.handler;
+package com.uttec.diameter.handler;
 
-import com.uttec.diameter.api.handler.DiameterServerInitializer;
-import com.uttec.diameter.impl.codec.DiameterCodecImpl;
+import com.uttec.diameter.codec.DiameterCodec;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
@@ -11,11 +10,11 @@ import io.netty.handler.ssl.SslContext;
 /**
  * Created by DuLerWeil on 2014/12/8.
  */
-public class DiameterServerInitializerImpl extends ChannelInitializer<Channel> implements DiameterServerInitializer {
+public class DiameterServerInitializer extends ChannelInitializer<Channel> {
     private SslContext sslCtx;
     private String handlerClass;
 
-    public DiameterServerInitializerImpl(SslContext sslCtx, String handlerClass) {
+    public DiameterServerInitializer(SslContext sslCtx, String handlerClass) {
         this.sslCtx = sslCtx;
         this.handlerClass = handlerClass;
     }
@@ -25,7 +24,7 @@ public class DiameterServerInitializerImpl extends ChannelInitializer<Channel> i
         if (sslCtx != null) {
             p.addLast(sslCtx.newHandler(ch.alloc()));
         }
-        p.addLast("codec", new DiameterCodecImpl());
+        p.addLast("codec", new DiameterCodec());
         Class<?> server = Class.forName(handlerClass);
         p.addLast("server", (ChannelHandler) server.newInstance());
     }

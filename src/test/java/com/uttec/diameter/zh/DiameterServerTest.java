@@ -1,6 +1,6 @@
 package com.uttec.diameter.zh;
 
-import com.uttec.diameter.impl.DiameterServerImpl;
+import com.uttec.diameter.DiameterServer;
 import org.junit.Test;
 
 /**
@@ -9,6 +9,6 @@ import org.junit.Test;
 public class DiameterServerTest {
     @Test
     public void testBootstrap() {
-        new DiameterServerImpl(false, 3868, null, "com.uttec.diameter.zh.ZhServerHandler").run();
+        new DiameterServer(false, 5658, null, "com.uttec.diameter.zh.ZhServerHandler").run();
     }
 }
