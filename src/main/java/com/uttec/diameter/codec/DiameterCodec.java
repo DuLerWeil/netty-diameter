@@ -32,7 +32,7 @@ public class DiameterCodec extends ByteToMessageCodec<Message> {
             if (in.readableBytes() < header.getLength() - 20) {
                 return;
             }
-            AvpSet avpSet = DiameterHelper.parseAvpSet(in, header);
+            AvpSet avpSet = DiameterHelper.parseAvpSet(in, header.getLength() - 20);
             Message msg = new Message(header, avpSet);
             out.add(msg);
             toHeader = true;

@@ -4,13 +4,23 @@ import com.uttec.diameter.msg.Avp;
 import com.uttec.diameter.msg.AvpSet;
 import com.uttec.diameter.msg.Header;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
+import java.io.UnsupportedEncodingException;
+import java.net.*;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by DuLerWeil on 2014/12/9.
  */
 public class DiameterHelper {
+    /**
+     * This is seconds shift (70 years in seconds) applied to date,
+     * since NTP date starts since 1900, not 1970.
+     */
+    private static final long SECOND_SHIFT = 2208988800L;
+
     public static Header parseHeader(ByteBuf in) {
         Header header = new Header();
         header.setVersion(in.readByte());
@@ -54,8 +64,8 @@ public class DiameterHelper {
         return avp;
     }
 
-    public static AvpSet parseAvpSet(ByteBuf in, Header header) {
-        int end = in.readerIndex() + header.getLength() - 20;
+    public static AvpSet parseAvpSet(ByteBuf in, int length) {
+        int end = in.readerIndex() + length;
         AvpSet avpSet = new AvpSet();
         List<Avp> avpList = avpSet.getAll();
         while (in.readerIndex() < end) {
@@ -192,5 +202,71 @@ public class DiameterHelper {
                 r |= (buf[i] & 0x00000000000000ff);
             }
         return r;
+    }
+
+    public static String getOctetString(byte[] data) {
+        try {
+            return new String(data, "iso-8859-1");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getUTF8String(byte[] data) {
+        try {
+            return new String(data, "utf8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static float getFloat(byte[] data, boolean asc) {
+        return Float.intBitsToFloat(getInt(data, asc));
+    }
+
+    public static double getDouble(byte[] data, boolean asc) {
+        return Double.longBitsToDouble(getLong(data, asc));
+    }
+
+    public static InetAddress getAddress(byte[] data) {
+        InetAddress inetAddress;
+        byte[] address;
+        try {
+            if (data[1] == 1) {//1:IPv4;2:IPv6
+                address = new byte[4];
+                System.arraycopy(data, 2, address, 0, address.length);
+                inetAddress = Inet4Address.getByAddress(address);
+            } else {
+                address = new byte[16];
+                System.arraycopy(data, 2, address, 0, address.length);
+                inetAddress = Inet6Address.getByAddress(address);
+            }
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
+        return inetAddress;
+    }
+
+    public static Date getTime(byte[] data) {
+        byte[] tmp = new byte[8];
+        System.arraycopy(data, 0 , tmp, 4, 4);
+        return new Date(((getLong(tmp, false) - SECOND_SHIFT) * 1000L));
+    }
+
+    public static String getDiameterIdentity(byte[] data) {
+        return getOctetString(data);
+    }
+
+    public static URI getDiameterURI(byte[] data) {
+        try {
+            return new URI(getOctetString(data));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static AvpSet getGrouped(byte[] data) {
+        ByteBuf buf = Unpooled.wrappedBuffer(data);
+        return parseAvpSet(buf, data.length);
     }
 }
