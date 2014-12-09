@@ -12,19 +12,31 @@ import java.util.List;
  */
 public class DiameterHelper {
     public static Header parseHeader(ByteBuf in) {
-        return new Header();
+        Header header = new Header();
+        header.setVersion(in.readByte());
+        byte[] lengthBytes = new byte[3];
+        in.readBytes(lengthBytes);
+        int length = getInt(lengthBytes, false);
+        header.setLength(length);
+        header.setFlags(in.readByte());
+        byte[] commandBytes = new byte[3];
+        in.readBytes(commandBytes);
+        int command = getInt(commandBytes, false);
+        header.setCommand(command);
+        header.setApplicationId(in.readUnsignedInt());
+        header.setHopByHopId(in.readUnsignedInt());
+        header.setEndToEndId(in.readUnsignedInt());
+        return header;
     }
 
     public static Avp parseAvp(ByteBuf in) {
         Avp avp = new Avp();
         avp.setCode(in.readUnsignedInt());
-        avp.setFlags(in.readUnsignedByte());
-
+        avp.setFlags(in.readByte());
         byte[] lengthBytes = new byte[3];
         in.readBytes(lengthBytes);
         int length = getInt(lengthBytes, false);
         avp.setLength(length);
-
         byte[] data;
         if (avp.isV()) {
             avp.setVendorId(in.readUnsignedInt());
@@ -34,7 +46,6 @@ public class DiameterHelper {
         }
         in.readBytes(data);
         avp.setData(data);
-
         int padding = length % 4;
         if (padding > 0) {
             padding = 4 - padding;
@@ -44,7 +55,7 @@ public class DiameterHelper {
     }
 
     public static AvpSet parseAvpSet(ByteBuf in, Header header) {
-        int end = in.readerIndex() + header.getLength();
+        int end = in.readerIndex() + header.getLength() - 20;
         AvpSet avpSet = new AvpSet();
         List<Avp> avpList = avpSet.getAll();
         while (in.readerIndex() < end) {

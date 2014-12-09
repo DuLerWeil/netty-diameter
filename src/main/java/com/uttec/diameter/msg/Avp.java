@@ -8,7 +8,7 @@ public class Avp {
     private boolean V;
     private boolean M;
     private boolean P;
-    private short flags;
+    private byte flags;
     private int length;
     private long vendorId;
     private byte[] data;
@@ -45,11 +45,11 @@ public class Avp {
         P = p;
     }
 
-    public short getFlags() {
+    public byte getFlags() {
         return flags;
     }
 
-    public void setFlags(short flags) {
+    public void setFlags(byte flags) {
         this.V = ((flags & 0x0080) == 0x0080);
         this.M = ((flags & 0x0040) == 0x0040);
         this.P = ((flags & 0x0020) == 0x0020);
