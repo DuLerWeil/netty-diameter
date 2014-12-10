@@ -1,8 +1,9 @@
-package com.uttec.diameter.codec;
+package com.uttec.diameter.util;
 
 import com.uttec.diameter.msg.Avp;
 import com.uttec.diameter.msg.AvpSet;
 import com.uttec.diameter.msg.Header;
+import com.uttec.diameter.msg.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -23,16 +24,10 @@ public class DiameterHelper {
 
     public static Header parseHeader(ByteBuf in) {
         Header header = new Header();
-        header.setVersion(in.readByte());
-        byte[] lengthBytes = new byte[3];
-        in.readBytes(lengthBytes);
-        int length = getInt(lengthBytes, false);
-        header.setLength(length);
-        header.setFlags(in.readByte());
-        byte[] commandBytes = new byte[3];
-        in.readBytes(commandBytes);
-        int command = getInt(commandBytes, false);
-        header.setCommand(command);
+        header.setVersion(in.getByte(in.readerIndex()));//index is 0
+        header.setLength(in.readInt() & 0x00ffffff);
+        header.setFlags(in.getByte(in.readerIndex()));//index is 4
+        header.setCommand(in.readInt() & 0x00ffffff);
         header.setApplicationId(in.readUnsignedInt());
         header.setHopByHopId(in.readUnsignedInt());
         header.setEndToEndId(in.readUnsignedInt());
@@ -42,10 +37,8 @@ public class DiameterHelper {
     public static Avp parseAvp(ByteBuf in) {
         Avp avp = new Avp();
         avp.setCode(in.readUnsignedInt());
-        avp.setFlags(in.readByte());
-        byte[] lengthBytes = new byte[3];
-        in.readBytes(lengthBytes);
-        int length = getInt(lengthBytes, false);
+        avp.setFlags(in.getByte(in.readerIndex()));//index is 4
+        int length = in.readInt() & 0x00ffffff;
         avp.setLength(length);
         byte[] data;
         if (avp.isV()) {
@@ -64,15 +57,40 @@ public class DiameterHelper {
         return avp;
     }
 
-    public static AvpSet parseAvpSet(ByteBuf in, int length) {
-        int end = in.readerIndex() + length;
+    public static AvpSet parseAvpSet(ByteBuf in) {
         AvpSet avpSet = new AvpSet();
         List<Avp> avpList = avpSet.getAll();
-        while (in.readerIndex() < end) {
+        while (in.readableBytes() > 0) {
             Avp avp = parseAvp(in);
             avpList.add(avp);
         }
         return avpSet;
+    }
+
+    public static ByteBuf encode(Message msg) {
+        Header header = msg.getHeader();
+        AvpSet avpSet = msg.getAvpSet();
+        ByteBuf buf = Unpooled.buffer(header.getLength());
+        buf.writeInt(header.getLength());
+        buf.setByte(buf.writerIndex() - 3, header.getVersion());
+        buf.writeInt(header.getCommand());
+        buf.setByte(buf.writerIndex() - 3, header.getFlags());
+        buf.writeInt((int) header.getApplicationId());
+        buf.writeInt((int) header.getHopByHopId());
+        buf.writeInt((int) header.getEndToEndId());
+        for (Avp avp: avpSet.getAll()) {
+            int length = avp.getLength();
+            buf.writeInt((int) avp.getCode());
+            buf.writeInt(length);
+            buf.setByte(buf.writerIndex() - 3, avp.getFlags());
+            buf.writeBytes(avp.getData());
+            int padding = length % 4;
+            if (padding > 0) {
+                padding = 4 - padding;
+            }
+            buf.writerIndex(buf.writerIndex() + padding);
+        }
+        return buf;
     }
 
     public static byte[] getBytes(short s, boolean asc) {
@@ -267,6 +285,6 @@ public class DiameterHelper {
 
     public static AvpSet getGrouped(byte[] data) {
         ByteBuf buf = Unpooled.wrappedBuffer(data);
-        return parseAvpSet(buf, data.length);
+        return parseAvpSet(buf);
     }
 }

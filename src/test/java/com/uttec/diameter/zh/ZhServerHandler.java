@@ -10,7 +10,20 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class ZhServerHandler extends SimpleChannelInboundHandler<Message> {
     @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        ctx.flush();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        ctx.close();
+    }
+    @Override
     protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-        ctx.close().addListener(ChannelFutureListener.CLOSE);
+        msg.getHeader().setR(false);
+        msg.getHeader().setP(true);
+        msg.getHeader().setE(true);
+        msg.getHeader().setT(true);
+        ctx.write(msg).addListener(ChannelFutureListener.CLOSE);
     }
 }

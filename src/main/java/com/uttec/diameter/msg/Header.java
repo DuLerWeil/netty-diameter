@@ -37,6 +37,7 @@ public class Header {
     }
 
     public void setR(boolean r) {
+        flags = (byte)((r) ? flags | (1 << 7) : flags & ~(1 << 7));
         R = r;
     }
 
@@ -45,6 +46,7 @@ public class Header {
     }
 
     public void setP(boolean p) {
+        flags = (byte)((p) ? flags | (1 << 6) : flags & ~(1 << 6));
         P = p;
     }
 
@@ -53,6 +55,7 @@ public class Header {
     }
 
     public void setE(boolean e) {
+        flags = (byte)((e) ? flags | (1 << 5) : flags & ~(1 << 5));
         E = e;
     }
 
@@ -61,6 +64,7 @@ public class Header {
     }
 
     public void setT(boolean t) {
+        flags = (byte)((t) ? flags | (1 << 4) : flags & ~(1 << 4));
         T = t;
     }
 
@@ -69,10 +73,10 @@ public class Header {
     }
 
     public void setFlags(byte flags) {
-        this.R = ((flags & 0x0080) == 0x0080);
-        this.P = ((flags & 0x0040) == 0x0040);
-        this.E = ((flags & 0x0020) == 0x0020);
-        this.T = ((flags & 0x0010) == 0x0010);
+        this.R = ((flags & 0x80) == 0x80);
+        this.P = ((flags & 0x40) == 0x40);
+        this.E = ((flags & 0x20) == 0x20);
+        this.T = ((flags & 0x10) == 0x10);
         this.flags = flags;
     }
 

@@ -1,6 +1,6 @@
 package com.uttec.diameter.msg;
 
-import com.uttec.diameter.codec.DiameterHelper;
+import com.uttec.diameter.util.DiameterHelper;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -32,6 +32,7 @@ public class Avp {
     }
 
     public void setV(boolean v) {
+        flags = (byte)((v) ? flags | (1 << 7) : flags & ~(1 << 7));
         V = v;
     }
 
@@ -40,6 +41,7 @@ public class Avp {
     }
 
     public void setM(boolean m) {
+        flags = (byte)((m) ? flags | (1 << 6) : flags & ~(1 << 6));
         M = m;
     }
 
@@ -48,6 +50,7 @@ public class Avp {
     }
 
     public void setP(boolean p) {
+        flags = (byte)((p) ? flags | (1 << 5) : flags & ~(1 << 5));
         P = p;
     }
 

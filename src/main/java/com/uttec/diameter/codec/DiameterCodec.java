@@ -3,6 +3,7 @@ package com.uttec.diameter.codec;
 import com.uttec.diameter.msg.AvpSet;
 import com.uttec.diameter.msg.Header;
 import com.uttec.diameter.msg.Message;
+import com.uttec.diameter.util.DiameterHelper;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -17,7 +18,7 @@ public class DiameterCodec extends ByteToMessageCodec<Message> {
     private Header header;
     @Override
     protected void encode(ChannelHandlerContext ctx, Message msg, ByteBuf out) throws Exception {
-        out.writeBytes(msg.getBytes());
+        out.writeBytes(DiameterHelper.encode(msg));
     }
 
     @Override
@@ -26,13 +27,14 @@ public class DiameterCodec extends ByteToMessageCodec<Message> {
             if (in.readableBytes() < 20) {
                 return;
             }
-            header = DiameterHelper.parseHeader(in);
+            header = DiameterHelper.parseHeader(in.readSlice(20));
             headerNext = false;
         } else {
-            if (in.readableBytes() < header.getLength() - 20) {
+            int avpSetLength = header.getLength() - 20;
+            if (in.readableBytes() < avpSetLength) {
                 return;
             }
-            AvpSet avpSet = DiameterHelper.parseAvpSet(in, header.getLength() - 20);
+            AvpSet avpSet = DiameterHelper.parseAvpSet(in.readSlice(avpSetLength));
             Message msg = new Message(header, avpSet);
             out.add(msg);
             headerNext = true;
