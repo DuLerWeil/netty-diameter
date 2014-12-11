@@ -67,6 +67,10 @@ public class ZhClientHandler extends SimpleChannelInboundHandler<Message> {
         avpSet.getAll().add(avp2);
         Message res = new Message(header, avpSet);
         Thread.sleep(1000);
-        ctx.writeAndFlush(res);
+        if (res.getHeader().getHopByHopId() == 10) {
+            ctx.writeAndFlush(res).addListener(ChannelFutureListener.CLOSE);
+        } else {
+            ctx.writeAndFlush(res);
+        }
     }
 }

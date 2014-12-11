@@ -34,9 +34,11 @@ public class DiameterClient implements Runnable {
                     .handler(new LoggingHandler(LogLevel.DEBUG))
                     .handler(new DiameterClientInitializer(null, handlerClass));
 
-            Channel ch = b.connect("127.0.0.1", 5658).sync().channel();
+            b.connect("127.0.0.1", 5658).sync().channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            group.shutdownGracefully();
         }
     }
 }
