@@ -72,9 +72,9 @@ public class DiameterHelper {
         AvpSet avpSet = msg.getAvpSet();
         ByteBuf buf = Unpooled.buffer(header.getLength());
         buf.writeInt(header.getLength());
-        buf.setByte(buf.writerIndex() - 3, header.getVersion());
+        buf.setByte(buf.writerIndex() - 4, header.getVersion());
         buf.writeInt(header.getCommand());
-        buf.setByte(buf.writerIndex() - 3, header.getFlags());
+        buf.setByte(buf.writerIndex() - 4, header.getFlags());
         buf.writeInt((int) header.getApplicationId());
         buf.writeInt((int) header.getHopByHopId());
         buf.writeInt((int) header.getEndToEndId());
@@ -82,7 +82,7 @@ public class DiameterHelper {
             int length = avp.getLength();
             buf.writeInt((int) avp.getCode());
             buf.writeInt(length);
-            buf.setByte(buf.writerIndex() - 3, avp.getFlags());
+            buf.setByte(buf.writerIndex() - 4, avp.getFlags());
             buf.writeBytes(avp.getData());
             int padding = length % 4;
             if (padding > 0) {
