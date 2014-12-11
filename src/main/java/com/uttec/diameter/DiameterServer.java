@@ -35,7 +35,7 @@ public class DiameterServer implements Runnable {
                     .option(ChannelOption.SO_BACKLOG, 1024)
                     .option(ChannelOption.SO_REUSEADDR, true)
                     .channel(NioServerSocketChannel.class)
-                    .handler(new LoggingHandler(LogLevel.INFO))
+                    .handler(new LoggingHandler(LogLevel.DEBUG))
                     .childHandler(new DiameterServerInitializer(sslCtx, handlerClass))
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childOption(ChannelOption.CONNECT_TIMEOUT_MILLIS, 60000);
