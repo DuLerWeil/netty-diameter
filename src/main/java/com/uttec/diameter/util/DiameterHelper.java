@@ -83,6 +83,9 @@ public class DiameterHelper {
             buf.writeInt((int) avp.getCode());
             buf.writeInt(length);
             buf.setByte(buf.writerIndex() - 4, avp.getFlags());
+            if (avp.isV()) {
+                buf.writeInt((int)avp.getVendorId());
+            }
             buf.writeBytes(avp.getData());
             int padding = length % 4;
             if (padding > 0) {
