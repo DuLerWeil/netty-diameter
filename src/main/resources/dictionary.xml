@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dictionary SYSTEM "dictionary.dtd" >
+<dictionary>
+  <base>
+    <!-- http://www.3gpp.org/ftp/Specs/html-info/29109.htm 4.2. -->
+    <command name="Multimedia-Auth" code="303"/>
+    <!-- http://www.3gpp.org/ftp/Specs/html-info/29109.htm 5.2. -->
+    <command name="Bootstrapping-Info" code="310"/>
+    
+    <!-- http://www.rfc-editor.org/pdfrfc/rfc3588.txt.pdf 3.1. Command Codes -->
+    <command name="Abort-Session" code="274"/>
+    <command name="Accounting" code="271"/>
+    <command name="Capabilities-Exchange" code="257"/>
+    <command name="Device-Watchdog" code="280"/>
+    <command name="Disconnect-Peer" code="282"/>
+    <command name="Re-Auth" code="258"/>
+    <command name="Session-Termination" code="275"/>
+
+  	<!-- http://www.rfc-editor.org/pdfrfc/rfc3588.txt.pdf 4.2. Basic AVP Data Formats -->
+	<typedefn type-name="OctetString"/>
+	<typedefn type-name="Integer32"/>
+	<typedefn type-name="Integer64"/>
+	<typedefn type-name="Unsigned32"/>
+	<typedefn type-name="Unsigned64"/>
+	<typedefn type-name="Float32"/>
+	<typedefn type-name="Float64"/>
+	<typedefn type-name="Grouped"/>
+	<!-- http://www.rfc-editor.org/pdfrfc/rfc3588.txt.pdf 4.3. Derived AVP Data Formats -->
+	<typedefn type-name="Address" type-parent="OctetString"/>
+	<typedefn type-name="Time" type-parent="OctetString"/>
+	<typedefn type-name="UTF8String" type-parent="OctetString"/>
+	<typedefn type-name="DiameterIdentity" type-parent="OctetString"/>
+	<typedefn type-name="DiameterURI" type-parent="OctetString"/>
+	<typedefn type-name="Enumerated" type-parent="Integer32"/>
+	<typedefn type-name="IPFilterRule" type-parent="OctetString"/>
+	<typedefn type-name="QoSFilterRule" type-parent="OctetString"/>
+	
+	<!-- http://www.rfc-editor.org/pdfrfc/rfc3588.txt.pdf 4.5. Diameter Base Protocol AVPs -->
+    <avp code="85" name="Acct-Interim-Interval" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="483" name="Accounting-Realtime-Required" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="DELIVER_AND_GRANT" code="1"/>
+      <enum name="GRANT_AND_STORE" code="2"/>
+      <enum name="GRANT_AND_LOSE" code="3"/>
+    </avp>
+    <avp code="50" name="Acct-Multi-Session-Id" mandatory="must">
+      <type type-name="UTF8String"/>
+    </avp>
+    <avp code="485" name="Accounting-Record-Number" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="480" name="Accounting-Record-Type" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="EVENT_RECORD" code="1"/>
+      <enum name="START_RECORD" code="2"/>
+      <enum name="INTERIM_RECORD" code="3"/>
+      <enum name="STOP_RECORD" code="4"/>
+    </avp>
+    <avp code="44" name="Accounting-Session-Id" mandatory="must">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="287" name="Accounting-Sub-Session-Id" mandatory="must">
+      <type type-name="Unsigned64"/>
+    </avp>
+    <avp code="259" name="Acct-Application-Id" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="258" name="Auth-Application-Id" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="274" name="Auth-Request-Type" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="AUTHENTICATE_ONLY" code="1"/>
+      <enum name="AUTHORIZE_ONLY" code="2"/>
+      <enum name="AUTHORIZE_AUTHENTICATE" code="3"/>
+    </avp>
+    <avp code="291" name="Authorization-Lifetime" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="276" name="Auth-Grace-Period" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="277" name="Auth-Session-State" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="STATE_MAINTAINED" code="0"/>
+      <enum name="NO_STATE_MAINTAINED" code="1"/>
+    </avp>
+    <avp code="285" name="Re-Auth-Request-Type" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="AUTHORIZE_ONLY" code="0"/>
+      <enum name="AUTHORIZE_AUTHENTICATE" code="1"/>
+    </avp>
+    <avp code="25" name="Class" mandatory="must">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="293" name="Destination-Host" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="283" name="Destination-Realm" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="273" name="Disconnect-Cause" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="REBOOTING" code="0"/>
+      <enum name="BUSY" code="1"/>
+      <enum name="DO_NOT_WANT_TO_TALK_TO_YOU" code="2"/>
+    </avp>
+    <avp code="300" name="E2E-Sequence-AVP" mandatory="must">
+      <type type-name="Grouped"/>
+    </avp>
+    <avp code="281" name="Error-Message" mandatory="must">
+      <type type-name="UTF8String"/>
+    </avp>
+    <avp code="294" name="Error-Reporting-Host" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="55" name="Event-Timestamp" mandatory="must">
+      <type type-name="Time"/>
+    </avp>
+    <avp code="297" name="Experimental-Result" mandatory="must">
+      <type type-name="Grouped"/>
+    </avp>
+    <avp code="298" name="Experimental-Result-Code" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="279" name="Failed-AVP" mandatory="must">
+      <type type-name="Grouped"/>
+    </avp>
+    <avp code="267" name="Firmware-Revision" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="257" name="Host-IP-Address" mandatory="must">
+      <type type-name="Address"/>
+    </avp>
+    <avp code="299" name="Inband-Security" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="272" name="Multi-Round-Time-Out" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="264" name="Origin-Host" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="296" name="Origin-Realm" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="278" name="Origin-State-Id" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="269" name="Product-Name" mandatory="must">
+      <type type-name="UTF8String"/>
+    </avp>
+    <avp code="280" name="Proxy-Host" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="284" name="Proxy-Info" mandatory="must">
+      <type type-name="Grouped"/>
+    </avp>
+    <avp code="33" name="Proxy-State" mandatory="must">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="292" name="Redirect-Host" mandatory="must">
+      <type type-name="DiameterURI"/>
+    </avp>
+    <avp code="261" name="Redirect-Host-Usage" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="DONT_CACHE" code="0"/>
+      <enum name="ALL_SESSION" code="1"/>
+      <enum name="ALL_REALM" code="2"/>
+      <enum name="REALM_AND_APPLICATION" code="3"/>
+      <enum name="ALL_APPLICATION" code="4"/>
+      <enum name="ALL_HOST" code="5"/>
+      <enum name="ALL_USER" code="6"/>
+    </avp>
+    <avp code="262" name="Redirect-Max-Cache-Time" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="268" name="Result-Code" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="282" name="Route-Record" mandatory="must">
+      <type type-name="DiameterIdentity"/>
+    </avp>
+    <avp code="263" name="Session-Id" mandatory="must">
+      <type type-name="UTF8String"/>
+    </avp>
+    <avp code="27" name="Session-Timeout" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="270" name="Session-Binding" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="271" name="Session-Server-Failover" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="REFUSE_SERVICE" code="0"/>
+      <enum name="TRY_AGAIN" code="1"/>
+      <enum name="ALLOW_SERVICE" code="2"/>
+      <enum name="TRY_AGAIN_ALLOW_SERVICE" code="3"/>
+    </avp>
+    <avp code="265" name="Supported-Vendor-Id" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="295" name="Termination-Cause" mandatory="must">
+      <type type-name="Enumerated"/>
+      <enum name="DIAMETER_LOGOUT" code="1"/>
+      <enum name="DIAMETER_SERVICE_NOT_PROVIDED" code="2"/>
+      <enum name="DIAMETER_BAD_ANSWER" code="3"/>
+      <enum name="DIAMETER_ADMINISTRATIVE" code="4"/>
+      <enum name="DIAMETER_LINK_BROKEN" code="5"/>
+      <enum name="DIAMETER_AUTH_EXPIRED" code="6"/>
+      <enum name="DIAMETER_USER_MOVED" code="7"/>
+      <enum name="DIAMETER_SESSION_TIMEOUT" code="8"/>
+    </avp>
+    <avp code="1" name="User-Name" mandatory="must">
+      <type type-name="UTF8String"/>
+    </avp>
+    <avp code="266" name="Vendor-Id" mandatory="must">
+      <type type-name="Unsigned32"/>
+    </avp>
+    <avp code="260" name="Vendor-Specific-Application-Id" mandatory="must">
+      <type type-name="Grouped"/>
+    </avp>
+
+    <!--  http://www.3gpp.org/ftp/Specs/html-info/29109.htm 6.3. -->
+    <avp code="400" name="GBA-UserSecSettings" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="401" name="Transaction-Identifier" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="402" name="NAF-Id" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="403" name="GAA-Service-Identifier" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="404" name="Key-ExpiryTime" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Time"/>
+    </avp>
+    <avp code="405" name="ME-Key-Material" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="406" name="UICC-Key-Material" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="407" name="GBA_U-Awareness-Indicator" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Enumerated"/>
+      <enum name="NO" code="0"/>
+      <enum name="YES" code="1"/>
+    </avp>
+    <avp code="408" name="BootstrapInfoCreationTime" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Time"/>
+    </avp>
+    <avp code="409" name="GUSS-Timestamp" mandatory="mustnot" vendor-bit="must" may-encrypt="no">
+      <type type-name="Time"/>
+    </avp>
+    <avp code="410" name="GBA-Type" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Enumerated"/>
+      <enum name="3G GBA" code="0"/>
+      <enum name="2G GBA" code="1"/>
+    </avp>
+    <avp code="411" name="UE-Id" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="412" name="UE-Id-Type" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Enumerated"/>
+      <enum name="Private user identity" code="0"/>
+      <enum name="Public user identity" code="1"/>
+    </avp>
+    <avp code="413" name="UICC-App-Label" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="414" name="UICC-ME" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Enumerated"/>
+      <enum name="GBA_ME" code="0"/>
+      <enum name="GBA_U" code="1"/>
+    </avp>
+    <avp code="415" name="Requested-Key-Lifetime" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Time"/>
+    </avp>
+    <avp code="416" name="Private-Identify-Request" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="Enumerated"/>
+      <enum name="Private identity requested" code="0"/>
+      <enum name="Private identity not request" code="1"/>
+    </avp>
+    <avp code="417" name="GBA-Push-Info" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+    <avp code="418" name="NAF-SA-Identifier" mandatory="must" vendor-bit="must" may-encrypt="no">
+      <type type-name="OctetString"/>
+    </avp>
+  </base>
+
+  <application id="0" name="Diameter Common Messages" uri="http://www.ietf.org/rfc/rfc3588.txt?number=3588"/>
+  <application id="3" name="Diameter Base Accounting" uri="http://www.ietf.org/rfc/rfc3588.txt?number=3588"/>
+  <application id="16777216" name="3GPP Cx" uri="http://www.ietf.org/rfc/rfc3588.txt?number=3588"/>
+  <application id="16777220" name="3GPP Zn" uri="http://www.3gpp.org/ftp/Specs/html-info/29109.htm"/>
+  <application id="16777221" name="3GPP Zh" uri="http://www.3gpp.org/ftp/Specs/html-info/29109.htm"/>
+  <application id="16777224" name="3GPP Gx" uri="http://www.3gpp.org/ftp/Specs/html-info/29210.htm"/>
+  <application id="16777227" name="Ericsson MSI" uri="http://www.iana.org/assignments/aaa-parameters/aaa-parameters.xml"/>
+  <application id="16777228" name="Ericsson Zx" uri="http://www.3GPP.org/ftp/Specs/html-info/29229.htm"/>
+  <application id="16777229" name="3GPP RX" uri="http://www.3GPP.org/ftp/Specs/html-info/29229.htm"/>
+  <application id="16777232" name="Ericsson Charging-CIP" uri="http://www.3gpp.org/ftp/Specs/html-info/29210.htm"/>
+  <application id="16777238" name="3GPP Gx" uri="http://www.3gpp.org/ftp/Specs/html-info/29212.htm"/>
+  <application id="16777250" name="3GPP STa" uri="http://www.3gpp.org/ftp/Specs/html-info/29273.htm"/>
+  <application id="16777251" name="3GPP S6a/S6d" uri="http://www.ietf.org/rfc/rfc5516.txt?number=5516"/>
+  <application id="16777252" name="3GPP S13/S13'" uri="http://www.ietf.org/rfc/rfc5516.txt?number=5516"/>
+  <application id="16777255" name="3GPP SLg" uri="http://www.ietf.org/rfc/rfc3588.txt?number=3588"/>
+  <application id="16777264" name="3GPP SWm" uri="http://www.3gpp.org/ftp/Specs/html-info/29212.htm"/>
+  <application id="16777265" name="3GPP SWx" uri="http://www.3gpp.org/ftp/Specs/html-info/29212.htm"/>
+  <application id="16777266" name="3GPP Gxx" uri="http://www.3gpp.org/ftp/Specs/html-info/29212.htm"/>
+  <application id="16777269" name="Ericsson HSI" uri="http://www.iana.org/assignments/aaa-parameters/aaa-parameters.xml"/>
+  <application id="16777272" name="3GPP S6b" uri="http://www.3gpp.org/ftp/Specs/html-info/29273.htm"/>
+  <application id="16777291" name="3GPP SLh" uri="http://www.ietf.org/rfc/rfc3588.txt?number=3588"/>
+  <application id="16777292" name="3GPP SGmb" uri="http://www.3gpp.org/ftp/Specs/html-info/29061.htm"/>
+  <application id="16777302" name="3GPP Sy" uri="http://www.3gpp.org/ftp/Specs/html-info/29219.htm"/>
+  <application id="16777304" name="Ericsson Sy" uri="http://www.iana.org/assignments/aaa-parameters/aaa-parameters.xml"/>
+  <application id="16777315" name="Ericsson Diameter Signalling Controller Application (DSC)" uri="http://www.iana.org/assignments/aaa-parameters/aaa-parameters.xml"/>
+  <application id="4294967295" name="Relay" uri="http://www.ietf.org/rfc/rfc6733.txt?number=6733"/>
+</dictionary>

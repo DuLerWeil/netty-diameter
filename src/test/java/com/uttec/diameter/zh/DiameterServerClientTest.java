@@ -17,8 +17,12 @@ public class DiameterServerClientTest {
             e.printStackTrace();
         }
         new Thread(new DiameterClient(false, null, "com.uttec.diameter.zh.ZhClientHandler"), "DiameterClient").start();
+        new Thread(new DiameterClient(false, null, "com.uttec.diameter.zh.ZhClientHandler"), "DiameterClient").start();
+        new Thread(new DiameterClient(false, null, "com.uttec.diameter.zh.ZhClientHandler"), "DiameterClient").start();
+        new Thread(new DiameterClient(false, null, "com.uttec.diameter.zh.ZhClientHandler"), "DiameterClient").start();
+        new Thread(new DiameterClient(false, null, "com.uttec.diameter.zh.ZhClientHandler"), "DiameterClient").start();
         try {
-            Thread.sleep(120000);
+            Thread.sleep(1200000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
